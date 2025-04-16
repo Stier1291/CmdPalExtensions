@@ -1,0 +1,11 @@
+{
+  "profiles": {
+    "CmdPalRdpExtension (Package)": {
+      "commandName": "MsixPackage",
+      "doNotLaunchApp": true
+    },
+    "CmdPalRdpExtension (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}
