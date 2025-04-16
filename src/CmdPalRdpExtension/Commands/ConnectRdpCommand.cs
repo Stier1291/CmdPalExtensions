@@ -21,6 +21,6 @@ public partial class ConnectRdpCommand(string arguments, bool admin = false) : I
       Process.Start("mstsc.exe", $"/v:{arguments}{(admin ? " /admin" : string.Empty)}");
       HistoryHelper.Instance.Add(arguments);
     }
-    return CommandResult.GoHome();
+    return CommandResult.Dismiss();
   }
 }
