@@ -2,8 +2,8 @@
 
 namespace CmdPalRdpExtension.Model
 {
-  public class RdpHistory
+  public class RdpState
   {
-    public List<RdpHistoryItem> Items { get; set; } = [];
+    public List<RdpStateItem> Items { get; set; } = [];
   }
 }

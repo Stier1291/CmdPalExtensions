@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using CmdPalRdpExtension.Commands;
 using CmdPalRdpExtension.Helpers;
+using CmdPalRdpExtension.Model;
 using Microsoft.CommandPalette.Extensions;
 using Microsoft.CommandPalette.Extensions.Toolkit;
 
@@ -13,15 +14,17 @@ namespace CmdPalRdpExtension.Controls.Pages;
 
 internal sealed partial class CmdPalRdpExtensionPage : DynamicListPage
 {
+  private readonly LocalStateHelper _localStateHelper;
   private IListItem[] _items;
 
-  public CmdPalRdpExtensionPage()
+  public CmdPalRdpExtensionPage(LocalStateHelper localStateHelper)
   {
+    _localStateHelper = localStateHelper;
     Icon = CmdPalRdpExtensionCommandsProvider.RdpIcon;
     Title = "Remote Desktop";
     Name = "Open";
 
-    _items = GetHistory().ToArray();
+    RefreshList();
   }
 
   public override IListItem[] GetItems()
@@ -37,31 +40,36 @@ internal sealed partial class CmdPalRdpExtensionPage : DynamicListPage
 
   private void RefreshList()
   {
-    _items = new List<IListItem> { GetListItem(SearchText, null) }
-      .Concat(GetHistory())
-      .ToArray();
+    var items = new List<IListItem>();
+    if (!string.IsNullOrEmpty(SearchText) && !string.IsNullOrWhiteSpace(SearchText))
+    {
+      items.Add(new ListItem(new ConnectRdpCommand(SearchText) { Name = $"Connect {SearchText}", Invoked = OnSave }) { MoreCommands = [new CommandContextItem(new ConnectRdpCommand(SearchText, true) { Name = "Admin session" })] });
+    }
+    items.Add(new ListItem(new RunRdpCommand { Name = "Run remote desktop" }) { MoreCommands = [new CommandContextItem(new RunRdpCommand(true) { Name = "Admin session" })] });
+    items.Add(new ListItem(new EditRdpStateItemPage(new RdpStateItem(), OnSave, OnDelete) { Name = "Add" }));
+    items.AddRange(_localStateHelper.GetItems().Select(i =>
+      new ListItem(new ConnectRdpCommand(i.Host) { Name = $"Connect {i.Name}" })
+      {
+        TextToSuggest = i.Host,
+        MoreCommands =
+        [
+          new CommandContextItem(new ConnectRdpCommand(i.Host, true) { Name = "Admin session" }),
+          new CommandContextItem(new EditRdpStateItemPage(i, OnSave, OnDelete))
+        ]
+      }));
+    _items = items.ToArray();
     RaiseItemsChanged(_items.Length);
   }
 
-  private IEnumerable<IListItem> GetHistory()
+  private void OnSave(RdpStateItem item)
   {
-    var iconInfo = IconHelpers.FromRelativePaths("Assets\\HistoryLightTheme.png", "Assets\\HistoryDarkTheme.png");
-    return HistoryHelper.Instance.Items.Select(i =>
-      GetListItem(i.Arguments, iconInfo, new CommandContextItem(new RemoveRdpHistoryEntryCommand(i.Id, RefreshList) { Name = "Remove" })));
+    _localStateHelper.Update(item);
+    RefreshList();
   }
 
-  private static ListItem GetListItem(string arguments, IIconInfo? icon, params IContextItem[] items)
+  private void OnDelete(RdpStateItem item)
   {
-    var moreCommands = new List<IContextItem>
-      {
-        new CommandContextItem(new ConnectRdpCommand(arguments, true) { Name = "Admin session" })
-      }
-      .Concat(items)
-      .ToArray();
-    return new ListItem(new ConnectRdpCommand(arguments))
-    {
-      Icon = icon,
-      MoreCommands = moreCommands
-    };
+    _localStateHelper.Remove(item);
+    RefreshList();
   }
 }

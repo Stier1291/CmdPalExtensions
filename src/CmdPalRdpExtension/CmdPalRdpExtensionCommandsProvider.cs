@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using CmdPalRdpExtension.Controls.Pages;
+using CmdPalRdpExtension.Helpers;
 using Microsoft.CommandPalette.Extensions;
 using Microsoft.CommandPalette.Extensions.Toolkit;
 
@@ -19,7 +20,7 @@ public partial class CmdPalRdpExtensionCommandsProvider : CommandProvider
     DisplayName = "Remote Desktop";
     Icon = RdpIcon;
     _commands = [
-      new CommandItem(new CmdPalRdpExtensionPage()) { Title = DisplayName },
+      new CommandItem(new CmdPalRdpExtensionPage(new LocalStateHelper())) { Title = DisplayName },
     ];
   }
 
