@@ -22,6 +22,7 @@
     <GenerateTestArtifacts>True</GenerateTestArtifacts>
     <AppxBundle>Never</AppxBundle>
     <HoursBetweenUpdateChecks>0</HoursBetweenUpdateChecks>
+    <AppxPackageDir>D:\Projects\CmdPalExtensions\releases\Version_1_0_0</AppxPackageDir>
   </PropertyGroup>
 
 	<ItemGroup>
