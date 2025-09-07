@@ -11,11 +11,11 @@
   <Identity
     Name="CmdPalRdpExtension"
     Publisher="CN=Andrea Berweger, O=Andrea Berweger, L=Walenstadt, S=Sankt Gallen, C=Switzerland"
-    Version="1.0.0.0" />
+    Version="0.0.1.0" />
 
   <Properties>
     <DisplayName>Remote Desktop extension for cmdpal</DisplayName>
-    <PublisherDisplayName>Andrea Berweger</PublisherDisplayName>
+    <PublisherDisplayName>Stier1291</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
 

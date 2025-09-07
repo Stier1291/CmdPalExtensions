@@ -20,9 +20,9 @@
     <AppxAutoIncrementPackageRevision>False</AppxAutoIncrementPackageRevision>
     <AppxSymbolPackageEnabled>False</AppxSymbolPackageEnabled>
     <GenerateTestArtifacts>True</GenerateTestArtifacts>
-    <AppxBundle>Never</AppxBundle>
+    <AppxBundle>Always</AppxBundle>
     <HoursBetweenUpdateChecks>0</HoursBetweenUpdateChecks>
-    <AppxPackageDir>D:\Projects\CmdPalExtensions\releases\Version_1_0_0</AppxPackageDir>
+    <AppxBundlePlatforms>x64|arm64</AppxBundlePlatforms>
   </PropertyGroup>
 
 	<ItemGroup>
