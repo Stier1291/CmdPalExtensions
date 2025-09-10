@@ -1,0 +1,11 @@
+{
+  "profiles": {
+    "CmdPalMikrotikExtension (Package)": {
+      "commandName": "MsixPackage",
+      "doNotLaunchApp": true
+    },
+    "CmdPalMikrotikExtension (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}
