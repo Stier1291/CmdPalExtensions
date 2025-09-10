@@ -12,14 +12,23 @@ public partial class CmdPalMikrotikExtensionCommandsProvider : CommandProvider
 {
   public static IconInfo MikrotikIcon = IconHelpers.FromRelativePath("Assets\\StoreLogo.scale-100.png");
 
+  private readonly SettingsManager _settingsManager;
   private readonly ICommandItem[] _commands;
 
   public CmdPalMikrotikExtensionCommandsProvider()
   {
     DisplayName = "Mikrotik";
     Icon = MikrotikIcon;
+
+    _settingsManager = new SettingsManager();
+    Settings = _settingsManager.Settings;
+
     _commands = [
-        new CommandItem(new HomePage(new LocalStateHelper())) { Title = DisplayName },
+        new CommandItem(new HomePage(new LocalStateHelper(), _settingsManager))
+        {
+          Title = DisplayName,
+          MoreCommands = [new CommandContextItem(_settingsManager.Settings.SettingsPage)]
+        }
         ];
   }
 

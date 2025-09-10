@@ -33,6 +33,8 @@ namespace CmdPalMikrotikExtension.Model.ConnectionItem
     public byte[]? Password { get; set; }
     public int? WinboxVersion { get; set; }
 
+    public bool IsNew => Guid == Guid.Empty;
+
     public bool TryGetPassword(out string password)
     {
       if (Password == null)

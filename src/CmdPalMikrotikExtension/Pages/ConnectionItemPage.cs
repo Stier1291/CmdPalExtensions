@@ -14,8 +14,14 @@ namespace CmdPalMikrotikExtension.Pages
     {
       _form = new ConnectionItemForm(item, saveDelegate, deleteDelegate);
 
-      Title = "Edit item";
-      Name = "Edit";
+      if (item.IsNew)
+      {
+        Title = Name = "Add item";
+      }
+      else
+      {
+        Title = Name = "Edit item";
+      }
     }
 
     public override IContent[] GetContent()
@@ -43,22 +49,20 @@ namespace CmdPalMikrotikExtension.Pages
                            "version": "1.6",
                            "body": [
                                {
-                                   "type": "TextBlock",
-                                   "size": "Medium",
-                                   "weight": "Bolder",
-                                   "text": "Edit item"
-                               },
-                               {
                                    "type": "Input.Text",
                                    "label": "Name",
                                    "value": "{{item.Name}}",
-                                   "id": "name"
+                                   "id": "name",
+                                   "isRequired": true,
+                                   "errorMessage": "Name cannot be empty!"
                                },
                                {
                                    "type": "Input.Text",
                                    "label": "Host",
                                    "value": "{{item.Host}}",
-                                   "id": "host"
+                                   "id": "host",
+                                   "isRequired": true,
+                                   "errorMessage": "Host cannot be empty!"
                                },
                                {
                                    "type": "Input.Text",
@@ -77,7 +81,7 @@ namespace CmdPalMikrotikExtension.Pages
                                    "type": "Input.ChoiceSet",
                                    "choices": [
                                        {
-                                           "title": "Settings",
+                                           "title": "Default from settings",
                                            "value": "settings"
                                        },
                                        {

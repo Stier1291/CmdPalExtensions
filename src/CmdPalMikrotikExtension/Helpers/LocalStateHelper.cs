@@ -4,15 +4,12 @@ using System.IO;
 using System.IO.Compression;
 using System.Text.Json;
 using CmdPalMikrotikExtension.Model.ConnectionItem;
-using CmdPalMikrotikExtension.Model.Settings;
 using Microsoft.CommandPalette.Extensions.Toolkit;
-using Settings = CmdPalMikrotikExtension.Model.Settings.Settings;
 
 namespace CmdPalMikrotikExtension.Helpers
 {
   public class LocalStateHelper
   {
-    private readonly string _settingsPath;
     private readonly string _connectionInfoPath;
 
     private readonly Dictionary<int, string> _exeInfos;
@@ -39,13 +36,6 @@ namespace CmdPalMikrotikExtension.Helpers
         zip.ExtractToDirectory(directory);
       }
 
-      _settingsPath = Path.Combine(directory, "settings_v1.json");
-
-      if (!File.Exists(_settingsPath))
-      {
-        UpdateSettings(new Settings { WinboxVersion = 4 });
-      }
-
       _connectionInfoPath = Path.Combine(directory, "connections_v1.json");
       if (File.Exists(_connectionInfoPath))
       {
@@ -65,21 +55,9 @@ namespace CmdPalMikrotikExtension.Helpers
 
     public IEnumerable<ConnectionItem> GetItems() => _items;
 
-    public Settings LoadSettings()
-    {
-      var json = File.ReadAllText(_settingsPath);
-      return JsonSerializer.Deserialize<Settings>(json, SettingsJsonContext.Default.Settings)!;
-    }
-
-    public void UpdateSettings(Settings settings)
-    {
-      var json = JsonSerializer.Serialize(settings, SettingsJsonContext.Default.Settings);
-      File.WriteAllText(_settingsPath, json);
-    }
-
     public void UpdateItem(ConnectionItem item)
     {
-      if (item.Guid == Guid.Empty)
+      if (item.IsNew)
       {
         item.Guid = Guid.NewGuid();
         _items.Add(item);
@@ -101,6 +79,28 @@ namespace CmdPalMikrotikExtension.Helpers
     public void RemoveItem(ConnectionItem item)
     {
       _items.Remove(item);
+      PersistItems();
+    }
+
+    public void MoveUpItem(ConnectionItem item)
+    {
+      var index = _items.IndexOf(item);
+      if(index <= 0) return;
+
+      var preItem = _items[index - 1];
+      _items[index - 1] = item;
+      _items[index] = preItem;
+      PersistItems();
+    }
+
+    public void MoveDownItem(ConnectionItem item)
+    {
+      var index = _items.IndexOf(item);
+      if (index == _items.Count - 1) return;
+
+      var nextItem = _items[index + 1];
+      _items[index + 1] = item;
+      _items[index] = nextItem;
       PersistItems();
     }
 
