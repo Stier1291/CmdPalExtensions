@@ -68,6 +68,7 @@ internal sealed partial class HomePage : DynamicListPage
         Details = new ConnectionItemDetails(item, _settings.WinboxVersion)
       }));
     items.Add(new ListItem(new ConnectionItemPage(new ConnectionItem(), OnSave, OnDelete)) { Title = "Add entry" });
+    items.Add(new ListItem(new OpenCommand(GetExePath)) { Title = "Open Winbox" });
 
     _items = items.ToArray();
     RaiseItemsChanged(_items.Length);
