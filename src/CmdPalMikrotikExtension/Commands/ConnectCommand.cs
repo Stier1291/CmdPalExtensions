@@ -34,7 +34,7 @@ namespace CmdPalMikrotikExtension.Commands
       }
       Process.Start(_getExePath(_item.WinboxVersion), args);
       Invoked?.Invoke(_item);
-      return CommandResult.Hide();
+      return CommandResult.Dismiss();
     }
   }
 }

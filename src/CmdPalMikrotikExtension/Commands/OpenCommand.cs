@@ -10,7 +10,7 @@ namespace CmdPalMikrotikExtension.Commands
     public override ICommandResult Invoke()
     {
       Process.Start(getExePath(null));
-      return CommandResult.Hide();
+      return CommandResult.Dismiss();
     }
   }
 }
